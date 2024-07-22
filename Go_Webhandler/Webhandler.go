@@ -33,5 +33,5 @@ func main() {
 	//TCP 연결 유지.아이피주소에 포트 또는 주소,연결
 
 	//여기에 Mux인스턴스를 넘겨서, 라우터 를 지정 mux가 들어올때!
-	http.ListenAndServe("", mux)
+	http.ListenAndServe("", mux) ///
 }
