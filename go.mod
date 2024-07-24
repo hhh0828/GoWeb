@@ -1,10 +1,6 @@
-module goweb/go_webhandler
-
-replace GOWEB/myapp => C:\Users\hyunho\GoWeb\GoWeb\myapp
+module GOWEB
 
 go 1.22.4
-
-require GOWEB/myapp v0.0.0-00010101000000-000000000000
 
 require (
 	github.com/smartystreets/goconvey v1.8.1 // indirect
