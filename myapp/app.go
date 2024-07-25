@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// 핸드러 구현 부
 type Foohandler struct{}
 
 func (f *Foohandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -22,6 +23,7 @@ func (f *Foohandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	//	}
 	json.NewDecoder(r.Body).Decode(user)
 	user.CreatedAt = time.Now()
+	user.age = 32
 	//user를 다시 json으로 변환
 	data, _ := json.Marshal(user)
 	//err123 := json.Unmarshal([]byte(data), &user)
@@ -32,14 +34,25 @@ func (f *Foohandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Println()
 }
 
+func Barhandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, "Hello World")
+
+}
+
 type User struct {
 	FistName  string `json:"first_name"`
 	Lastname  string `json:"last_name"`
 	Email     string `json:"email"`
 	CreatedAt time.Time
+	age       int
 }
 
+//핸드러리스트
+
 func NewHttpHandler() http.Handler {
+	//NewHttpHandler list를 만듬 http.Handler를 반환함.
+	//NewHttpHandler는 ServeHTTP Handler인터페이스를 구현하고 있음..
+	//return servemux
 	mux := http.NewServeMux()
 
 	//handle함수를 직접 등록할때
@@ -54,14 +67,13 @@ func NewHttpHandler() http.Handler {
 		fmt.Fprintf(w, "hello  %s", name)
 	})
 
-	mux.HandleFunc("/bar", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "hello bar")
-	})
+	mux.HandleFunc("/bar", Barhandler)
 	//instance로 해서 ServeHTTP()를 직접 구현하여. 사용하는 형태.
 	mux.Handle("/foo", &Foohandler{})
+
 	//TCP 연결 유지.아이피주소에 포트 또는 주소,연결
 
 	//여기에 Mux인스턴스를 넘겨서, 라우터 를 지정 mux가 들어올때!
-	http.ListenAndServe("", mux) ///
+	//http.ListenAndServe("", mux) ///
 	return mux
 }
